@@ -4,6 +4,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizRush", "QuizRush.csproj", "{4EE85850-AB7A-45CB-BC99-8F5D627C5838}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7F1D7E43-039E-4F2A-BD53-4DAB5ED3FE3D} = {7F1D7E43-039E-4F2A-BD53-4DAB5ED3FE3D}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "..\DataAccess\DataAccess.csproj", "{4E035107-3E8F-412B-871D-1DA273101A0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogic", "..\BusinessLogic\BusinessLogic.csproj", "{7F1D7E43-039E-4F2A-BD53-4DAB5ED3FE3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +22,14 @@ Global
 		{4EE85850-AB7A-45CB-BC99-8F5D627C5838}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EE85850-AB7A-45CB-BC99-8F5D627C5838}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4EE85850-AB7A-45CB-BC99-8F5D627C5838}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E035107-3E8F-412B-871D-1DA273101A0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E035107-3E8F-412B-871D-1DA273101A0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E035107-3E8F-412B-871D-1DA273101A0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E035107-3E8F-412B-871D-1DA273101A0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F1D7E43-039E-4F2A-BD53-4DAB5ED3FE3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F1D7E43-039E-4F2A-BD53-4DAB5ED3FE3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F1D7E43-039E-4F2A-BD53-4DAB5ED3FE3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F1D7E43-039E-4F2A-BD53-4DAB5ED3FE3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
