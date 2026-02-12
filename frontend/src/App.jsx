@@ -3,7 +3,7 @@ import { useApi } from './context/ApiContext'
 import './App.css'
 
 function App() {
-  const { axiosInstance } = useApi()
+  const { api } = useApi()
   const [status, setStatus] = useState('Initializing...')
   const [response, setResponse] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -13,7 +13,7 @@ function App() {
     setLoading(true)
     setStatus('Sending request...')
     try {
-      const res = await axiosInstance.get('/weatherforecast')
+      const res = await api.get('/weatherforecast')
       setStatus('✓ Request Successful!')
       setResponse(res.data)
     } catch (error) {
