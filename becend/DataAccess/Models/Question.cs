@@ -1,6 +1,6 @@
 namespace DataAccess.Models
 {
-    public class Question
+    public class Question : BaseEntity
     {
         public int Id { get; set; }
         public string Text { get; set; } = string.Empty;

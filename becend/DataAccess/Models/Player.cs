@@ -1,6 +1,6 @@
 namespace DataAccess.Models
 {
-    public class Player
+    public class Player : BaseEntity
     {
         public int Id { get; set; }
         public string Nickname { get; set; } = string.Empty;

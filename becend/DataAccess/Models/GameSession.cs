@@ -1,6 +1,6 @@
 namespace DataAccess.Models
 {
-    public class GameSession
+    public class GameSession : BaseEntity
     {
         public int Id { get; set; }
         public string PinCode { get; set; } = string.Empty;
