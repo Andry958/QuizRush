@@ -12,6 +12,8 @@ namespace DataAccess.Data
         public DbSet<Answer> Answers { get; set; }
         public DbSet<GameSession> GameSessions { get; set; }
         public DbSet<Player> Players { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+
 
         public QuizRushContext(DbContextOptions<QuizRushContext> options)
             : base(options)
@@ -62,6 +64,12 @@ namespace DataAccess.Data
                 .HasOne(p => p.GameSession)
                 .WithMany(gs => gs.Players)
                 .HasForeignKey(p => p.GameSessionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<RefreshToken>()
+                .HasOne(rt => rt.User)
+                .WithMany(u => u.RefreshTokens)
+                .HasForeignKey(rt => rt.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
