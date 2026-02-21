@@ -8,7 +8,7 @@ namespace DataAccess.Models
 {
 
 
-    public class RefreshToken
+    public class RefreshToken : BaseEntity
     {
         public int Id { get; set; }   // 🔥 int, не string
 
