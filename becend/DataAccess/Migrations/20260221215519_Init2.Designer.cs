@@ -4,6 +4,7 @@ using DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(QuizRushContext))]
-    partial class QuizRushContextModelSnapshot : ModelSnapshot
+    [Migration("20260221215519_Init2")]
+    partial class Init2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,36 +48,6 @@ namespace DataAccess.Migrations
                     b.HasIndex("QuestionId");
 
                     b.ToTable("Answers");
-                });
-
-            modelBuilder.Entity("DataAccess.Models.AnsweredQuestion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsCorrect")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("PlayerId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Points")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SelectedAnswerId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PlayerId");
-
-                    b.ToTable("AnsweredQuestions");
                 });
 
             modelBuilder.Entity("DataAccess.Models.GameSession", b =>
@@ -432,17 +405,6 @@ namespace DataAccess.Migrations
                     b.Navigation("Question");
                 });
 
-            modelBuilder.Entity("DataAccess.Models.AnsweredQuestion", b =>
-                {
-                    b.HasOne("DataAccess.Models.Player", "Player")
-                        .WithMany("AnsweredQuestions")
-                        .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Player");
-                });
-
             modelBuilder.Entity("DataAccess.Models.GameSession", b =>
                 {
                     b.HasOne("DataAccess.Models.User", "CreatedBy")
@@ -560,11 +522,6 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("DataAccess.Models.GameSession", b =>
                 {
                     b.Navigation("Players");
-                });
-
-            modelBuilder.Entity("DataAccess.Models.Player", b =>
-                {
-                    b.Navigation("AnsweredQuestions");
                 });
 
             modelBuilder.Entity("DataAccess.Models.Question", b =>

@@ -5,8 +5,8 @@ namespace DataAccess.Models
         public int Id { get; set; }
         public string PinCode { get; set; } = string.Empty;
         public int QuizId { get; set; }
-        public Quiz Quiz { get; set; }
-        
+        public Quiz? Quiz { get; set; }
+        public int CurrentQuestionIndex { get; set; } = 0;
         public string CreatedById { get; set; } = string.Empty;
         public User CreatedBy { get; set; }
 

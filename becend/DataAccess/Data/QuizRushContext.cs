@@ -13,7 +13,7 @@ namespace DataAccess.Data
         public DbSet<GameSession> GameSessions { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
-
+        public DbSet<AnsweredQuestion> AnsweredQuestions { get; set; }
 
         public QuizRushContext(DbContextOptions<QuizRushContext> options)
             : base(options)

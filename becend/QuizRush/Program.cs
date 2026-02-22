@@ -7,6 +7,7 @@ using BusinessLogic.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using DataAccess.Repo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,9 +23,11 @@ builder.Services.AddDbContext<QuizRushContext>(options =>
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<QuizRushContext>();
 
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IAnswerService, AnswerService>();
+builder.Services.AddScoped<IQuizSessionGameService, QuizSessionGameService>();
 builder.Services.AddScoped<TokenService>();
-builder.Services.AddScoped<IQuizService, QuizService>();
+builder.Services.AddScoped<IQuizService, QuizSessionService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 
 builder.Services.AddControllers();

@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLogic.Services
 {
-    public class QuizService : IQuizService
+    public class QuizSessionService : IQuizService
     {
         private readonly QuizRushContext _context;
 
-        public QuizService(QuizRushContext context)
+        public QuizSessionService(QuizRushContext context)
         {
             _context = context;
         }
