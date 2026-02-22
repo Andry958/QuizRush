@@ -22,6 +22,6 @@ namespace DataAccess.Repo
         Task DeleteAsync(Guid id);
         Task DeleteAsync(T entity);
         Task ClearAsync();
-
+        Task SaveChangesAsync();
     }
 }
