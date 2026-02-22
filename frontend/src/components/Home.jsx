@@ -3,7 +3,7 @@ import './Home.css'
 
 function Home() {
   return (
-    <Layout>
+    <>
       <section className="hero-section">
         <div className="hero-content">
           <h2 className="hero-title">Test Your Knowledge, Challenge Your Friends</h2>
@@ -61,7 +61,7 @@ function Home() {
           </p>
         </div>
       </section>
-    </Layout>
+    </>
   )
 }
 

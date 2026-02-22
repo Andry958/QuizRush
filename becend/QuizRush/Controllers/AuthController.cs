@@ -36,7 +36,7 @@ namespace QuizRush.Controllers
         {
             var user = new User
             {
-                UserName = dto.Email,
+                UserName = dto.Nickname,
                 Email = dto.Email
             };
 
@@ -76,7 +76,8 @@ namespace QuizRush.Controllers
             return Ok(new
             {
                 accessToken,
-                refreshToken
+                refreshToken,
+                nickname = user.UserName
             });
         }
         [HttpPost("refresh")]
@@ -115,7 +116,8 @@ namespace QuizRush.Controllers
             return Ok(new
             {
                 accessToken = newAccessToken,
-                refreshToken = newRefreshToken
+                refreshToken = newRefreshToken,
+                nickname = user.UserName
             });
         }
         [HttpPost("revoke")]

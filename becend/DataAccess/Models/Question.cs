@@ -7,7 +7,7 @@ namespace DataAccess.Models
         public int QuizId { get; set; }
         public Quiz Quiz { get; set; }
 
-        public int TimeLimit { get; set; } // секунди
+        public int TimeLimit { get; set; } 
         public List<Answer> Answers { get; set; } = new();
     }
 }

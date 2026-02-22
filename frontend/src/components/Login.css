@@ -1,0 +1,125 @@
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 200px);
+  padding: 20px;
+  background: #F5F3F7;
+  /* Match Home page bg */
+}
+
+.auth-card {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  /* Softer corners */
+  box-shadow: 0 10px 30px rgba(184, 169, 201, 0.2);
+  width: 100%;
+  max-width: 450px;
+  text-align: center;
+}
+
+.auth-card h2 {
+  margin-bottom: 8px;
+  color: #5B4E77;
+  /* Purple from Home */
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.auth-subtitle {
+  color: #6B7E5A;
+  /* Greenish/Grey from Home */
+  margin-bottom: 32px;
+  font-size: 1.1rem;
+}
+
+.auth-form {
+  text-align: left;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #3D3A3A;
+  font-size: 0.95rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #E0D9E8;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background: #FAFAFB;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #B8A9C9;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(184, 169, 201, 0.1);
+}
+
+.btn-auth {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #B8A9C9 0%, #5B4E77 100%);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  /* Rounded pill button */
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(184, 169, 201, 0.3);
+}
+
+.btn-auth:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(184, 169, 201, 0.4);
+  background: linear-gradient(135deg, #5B4E77 0%, #B8A9C9 100%);
+}
+
+.btn-auth:disabled {
+  background: #B8B8B8;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.auth-error {
+  background-color: #FFF5F5;
+  color: #E53E3E;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 24px;
+  font-size: 0.95rem;
+  border-left: 4px solid #E53E3E;
+}
+
+.auth-footer {
+  margin-top: 32px;
+  font-size: 1rem;
+  color: #6B7E5A;
+}
+
+.auth-footer a {
+  color: #5B4E77;
+  text-decoration: none;
+  font-weight: 700;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.auth-footer a:hover {
+  border-bottom-color: #B8A9C9;
+}
