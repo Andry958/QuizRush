@@ -10,7 +10,7 @@ namespace DataAccess.Models
 
     public class RefreshToken : BaseEntity
     {
-        public int Id { get; set; }   // 🔥 int, не string
+        public int Id { get; set; }   
 
         public string Token { get; set; }
 
@@ -20,8 +20,7 @@ namespace DataAccess.Models
 
         public DateTime Created { get; set; } = DateTime.UtcNow;
 
-        // ВАЖЛИВО
-        public string UserId { get; set; }   // 🔥 string, не int
+        public string UserId { get; set; }  
 
         public User User { get; set; }
     }

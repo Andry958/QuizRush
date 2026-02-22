@@ -19,7 +19,10 @@ builder.Services.AddDbContext<QuizRushContext>(options =>
     options.UseSqlServer(connectionString));
 
 // Add Identity
-builder.Services.AddIdentity<User, IdentityRole>()
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+{
+    options.User.RequireUniqueEmail = true;
+})
     .AddEntityFrameworkStores<QuizRushContext>();
 
 builder.Services.AddScoped<IAnswerService, AnswerService>();
