@@ -20,54 +20,131 @@ namespace QuizRushAPI.Controllers
         [HttpPost("create")] 
         public async Task<IActionResult> CreateSession([FromQuery] string userId, [FromQuery] int quizId, [FromQuery] string? pinCode, [FromQuery] string? title, [FromQuery] string description)
         {
-            var session = await _gameService.CreateGameSessionAsync(userId, quizId, pinCode, title, description);
-            return Ok(session);
+            try
+            {
+                var session = await _gameService.CreateGameSessionAsync(userId, quizId, pinCode, title, description);
+                return Ok(session);
+            }
+            catch (KeyNotFoundException knf)
+            {
+                return NotFound(knf.Message);
+            }
+            catch (InvalidOperationException ioe)
+            {
+                return BadRequest(ioe.Message);
+            }
         }
 
         [HttpPost("{sessionId}/join")] // приєднання до сесії. потрібно просто ввести нік нейм і айді сесії для приєднання
         public async Task<IActionResult> JoinSession(int sessionId, [FromQuery] string nickName)
         {
-            var playerId = await _gameService.JoinGameSessionAsync(sessionId, nickName);
-            return Ok(new { PlayerId = playerId });
+            try
+            {
+                var playerId = await _gameService.JoinGameSessionAsync(sessionId, nickName);
+                return Ok(new { PlayerId = playerId });
+            }
+            catch (KeyNotFoundException knf)
+            {
+                return NotFound(knf.Message);
+            }
+            catch (InvalidOperationException ioe)
+            {
+                return BadRequest(ioe.Message);
+            }
         }
 
         [HttpPost("{sessionId}/start")] // початок сесії. тільки сервер може почати сесію, після цього всі гравці отримують перше питання
-        public async Task<IActionResult> StartSession(int sessionId)
+        public async Task<IActionResult> StartSession(int sessionId, [FromQuery] string userId)
         {
-            await _gameService.StartGameSessionAsync(sessionId);
-            return Ok();
+            try
+            {
+                await _gameService.StartGameSessionAsync(sessionId, userId);
+                return Ok();
+            }
+            catch (KeyNotFoundException knf)
+            {
+                return NotFound(knf.Message);
+            }
+            catch (InvalidOperationException ioe)
+            {
+                return BadRequest(ioe.Message);
+            }
         }
 
         [HttpPost("{sessionId}/answer")] // надсилання відповіді на поточне питання.
                                          // гравець надсилає свою відповідь, вказуючи айді сесії, свій айді та айді вибраної відповіді
         public async Task<IActionResult> SubmitAnswer(int sessionId, int playerId, int answerId)
         {
-            await _gameService.SubmitAnswerAsync(sessionId, playerId, answerId);
-            return Ok();
+            try
+            {
+                await _gameService.SubmitAnswerAsync(sessionId, playerId, answerId);
+                return Ok();
+            }
+            catch (KeyNotFoundException knf)
+            {
+                return NotFound(knf.Message);
+            }
+            catch (InvalidOperationException ioe)
+            {
+                return BadRequest(ioe.Message);
+            }
         }
 
         // отримати поточне питання
         [HttpGet("{sessionId}/current")]
         public async Task<IActionResult> GetCurrentQuestion(int sessionId)
         {
-            var question = await _gameService.GetCurrentQuestionAsync(sessionId);
-            return Ok(question);
+            try
+            {
+                var question = await _gameService.GetCurrentQuestionAsync(sessionId);
+                return Ok(question);
+            }
+            catch (KeyNotFoundException knf)
+            {
+                return NotFound(knf.Message);
+            }
+            catch (InvalidOperationException ioe)
+            {
+                return BadRequest(ioe.Message);
+            }
         }
 
         // перейти на інше питання. після переходження застосувати GetCurrentQuestion
         [HttpPost("{sessionId}/next")]
         public async Task<IActionResult> NextQuestion(int sessionId)
         {
-            await _gameService.NextQuestionAsync(sessionId);
-            return Ok();
+            try
+            {
+                await _gameService.NextQuestionAsync(sessionId);
+                return Ok();
+            }
+            catch (KeyNotFoundException knf)
+            {
+                return NotFound(knf.Message);
+            }
+            catch (InvalidOperationException ioe)
+            {
+                return BadRequest(ioe.Message);
+            }
         }
 
         // закінчення сесії гри і отримання фінальних результатів
         [HttpPost("{sessionId}/end")]
-        public async Task<IActionResult> EndSession(int sessionId)
+        public async Task<IActionResult> EndSession(int sessionId, [FromQuery] string userId)
         {
-            var leaderboard = await _gameService.EndGameSessionAsync(sessionId);
-            return Ok(leaderboard);
+            try
+            {
+                var leaderboard = await _gameService.EndGameSessionAsync(sessionId, userId);
+                return Ok(leaderboard);
+            }
+            catch (KeyNotFoundException knf)
+            {
+                return NotFound(knf.Message);
+            }
+            catch (InvalidOperationException ioe)
+            {
+                return BadRequest(ioe.Message);
+            }
         }
         // отримати результати конкретного гравця по сесії
         [HttpGet("{sessionId}/results/{playerId}")]

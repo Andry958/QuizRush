@@ -33,10 +33,19 @@ namespace BusinessLogic.Services
             var user = await _signInManager.UserManager.FindByIdAsync(userId)
                        ?? throw new KeyNotFoundException("User not found.");
 
+            // validate quiz existence and that it has questions
+            var quiz = await _ctx.Quizzes
+                                 .Include(q => q.Questions)
+                                 .FirstOrDefaultAsync(q => q.Id == quizId)
+                         ?? throw new KeyNotFoundException("Quiz not found.");
+
+            if (quiz.Questions == null || !quiz.Questions.Any())
+                throw new InvalidOperationException("Quiz must contain at least one question.");
+
             var session = new GameSession
             {
                 QuizId = quizId,
-                PinCode = pinCode,
+                PinCode = pinCode ?? string.Empty,
                 CreatedById = userId,
                 StartedAt = DateTime.UtcNow,
                 IsActive = false,
@@ -65,8 +74,13 @@ namespace BusinessLogic.Services
         {
             var session = await GetSessionWithPlayersAsync(gameSessionId);
 
-            if (!session.IsActive)
-                throw new InvalidOperationException("Game is not active.");
+            // cannot join after game has started
+            if (session.IsActive)
+                throw new InvalidOperationException("Cannot join once the game has already started.");
+
+            // prevent duplicate nicknames
+            if (session.Players.Any(p => p.Nickname == nickname))
+                throw new InvalidOperationException("A player with the same nickname has already joined the session.");
 
             var player = new Player
             {
@@ -80,9 +94,15 @@ namespace BusinessLogic.Services
             return player.Id;
         }
 
-        public async Task StartGameSessionAsync(int gameSessionId)
+        public async Task StartGameSessionAsync(int gameSessionId, string userId)
         {
             var session = await GetSessionAsync(gameSessionId);
+
+            if (session.CreatedById != userId)
+                throw new InvalidOperationException("Only the creator can start the session.");
+
+            if (session.IsActive)
+                throw new InvalidOperationException("Session is already started.");
 
             session.IsActive = true;
             session.CurrentQuestionIndex = 0;
@@ -97,7 +117,7 @@ namespace BusinessLogic.Services
             if (!session.IsActive)
                 throw new InvalidOperationException("Game is not active.");
 
-            var questions = session.Quiz.Questions.OrderBy(q => q.Id).ToList();
+            var questions = session.Quiz?.Questions?.OrderBy(q => q.Id).ToList() ?? new List<Question>();
 
             if (session.CurrentQuestionIndex >= questions.Count)
                 return null;
@@ -123,13 +143,23 @@ namespace BusinessLogic.Services
             if (!session.IsActive)
                 throw new InvalidOperationException("Game is not active.");
 
-            var player = session.Players.First(p => p.Id == playerId);
+            // make sure the player actually belongs to this session
+            var player = session.Players.FirstOrDefault(p => p.Id == playerId)
+                         ?? throw new KeyNotFoundException("Player is not part of this game session.");
 
-            var question = session.Quiz.Questions
-                .OrderBy(q => q.Id)
-                .ElementAt(session.CurrentQuestionIndex);
+            var questions = session.Quiz?.Questions?.OrderBy(q => q.Id).ToList() ?? new List<Question>();
 
-            var answer = question.Answers.First(a => a.Id == answerId);
+            if (session.CurrentQuestionIndex >= questions.Count)
+                throw new InvalidOperationException("No current question available.");
+
+            var question = questions[session.CurrentQuestionIndex];
+
+            // prevent answering the same question twice
+            if (player.AnsweredQuestions.Any(aq => aq.QuestionId == question.Id))
+                throw new InvalidOperationException("Player has already answered the current question.");
+
+            var answer = question.Answers.FirstOrDefault(a => a.Id == answerId)
+                         ?? throw new KeyNotFoundException("Answer not found for current question.");
 
             bool isCorrect = answer.IsCorrect;
 
@@ -153,15 +183,18 @@ namespace BusinessLogic.Services
 
             session.CurrentQuestionIndex++;
 
-            if (session.CurrentQuestionIndex >= session.Quiz.Questions.Count)
+            if (session.Quiz?.Questions == null || session.CurrentQuestionIndex >= session.Quiz.Questions.Count)
                 session.IsActive = false;
 
             await _ctx.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<LeaderboardDto>> EndGameSessionAsync(int gameSessionId)
+        public async Task<IEnumerable<LeaderboardDto>> EndGameSessionAsync(int gameSessionId, string userId)
         {
             var session = await GetSessionWithPlayersAsync(gameSessionId);
+
+            if (session.CreatedById != userId)
+                throw new InvalidOperationException("Only the creator can end the session.");
 
             session.IsActive = false;
             await _ctx.SaveChangesAsync();
@@ -248,9 +281,9 @@ namespace BusinessLogic.Services
         private async Task<GameSession> GetSessionWithQuizAsync(int id)
         {
             return await _ctx.GameSessions
-                .Include(gs => gs.Quiz)
-                    .ThenInclude(q => q.Questions)
-                        .ThenInclude(q => q.Answers)
+                .Include(gs => gs.Quiz!)
+                    .ThenInclude(q => q.Questions!)
+                        .ThenInclude(q => q.Answers!)
                 .FirstOrDefaultAsync(gs => gs.Id == id)
                 ?? throw new KeyNotFoundException("Game session not found.");
         }
@@ -258,9 +291,9 @@ namespace BusinessLogic.Services
         private async Task<GameSession> GetSessionWithQuizAndPlayersAsync(int id)
         {
             return await _ctx.GameSessions
-                .Include(gs => gs.Quiz)
-                    .ThenInclude(q => q.Questions)
-                        .ThenInclude(q => q.Answers)
+                .Include(gs => gs.Quiz!)
+                    .ThenInclude(q => q.Questions!)
+                        .ThenInclude(q => q.Answers!)
                 .Include(gs => gs.Players)
                     .ThenInclude(p => p.AnsweredQuestions)
                 .FirstOrDefaultAsync(gs => gs.Id == id)

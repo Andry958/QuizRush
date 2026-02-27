@@ -10,11 +10,12 @@ namespace BusinessLogic.Interfaces
         Task<GameSessionDto> CreateGameSessionAsync(string userId, int quizId, string? pinCode, string? title, string description);
         Task<int> JoinGameSessionAsync(int gameSessionId, string nickName);
 
-        Task StartGameSessionAsync(int gameSessionId);
+        // userId parameter lets us confirm only creator can start/end session
+        Task StartGameSessionAsync(int gameSessionId, string userId);
         Task SubmitAnswerAsync(int gameSessionId, int playerId, int answerId);
         Task<QuizQuestionDto?> GetCurrentQuestionAsync(int gameSessionId);
         Task NextQuestionAsync(int gameSessionId);
-        Task<IEnumerable<LeaderboardDto>> EndGameSessionAsync(int gameSessionId);
+        Task<IEnumerable<LeaderboardDto>> EndGameSessionAsync(int gameSessionId, string userId);
         Task<IEnumerable<QuizAttemptResultDto>> GetPlayerResultsAsync(int gameSessionId, int playerId);
         Task<IEnumerable<LeaderboardDto>> GetLeaderboardAsync(int gameSessionId);
         Task<IEnumerable<QuizAttemptResultDto>> GetAllPlayersResultsAsync(int gameSessionId);
