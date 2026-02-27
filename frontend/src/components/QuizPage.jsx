@@ -32,10 +32,16 @@ function QuizPage() {
   if (!quiz) return <div className="qp-center">Квіз не знайдено</div>
 
   const questions = quiz.questions || []
+  const getStars = (count=0) => {
+    const levels=[5,10,15,20]
+    let n=1
+    for(let i=0;i<levels.length;i++) if(count>levels[i]) n=i+2
+    if(n>5) n=5
+    return '★'.repeat(n)+'☆'.repeat(5-n)
+  }
 
   const selectOption = (qIdx, optIdx) => {
-    setAnswers(a => {
-      const copy = [...a]
+    setAnswers(copy => {
       copy[qIdx] = optIdx
       return copy
     })
@@ -121,9 +127,12 @@ function QuizPage() {
   const q = questions[current]
   const opts = q?.options || []
 
+  const starsDisplay = getStars(questions.length)
+
   return (
     <div className="qp-wrap">
       <div className="qp-card">
+        <div className="qp-stars">{starsDisplay}</div>
         <h2 className="qp-title">{quiz.title}</h2>
         {quiz.description && <p className="qp-sub">{quiz.description}</p>}
 
