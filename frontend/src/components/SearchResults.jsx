@@ -1,6 +1,7 @@
 import { useLocation, Link } from 'react-router-dom'
 import { useApi } from '../context/ApiContext'
 import { useEffect, useState } from 'react'
+import './SearchResults.css'
 
 function SearchResults() {
   const { axiosInstance } = useApi()
@@ -22,25 +23,33 @@ function SearchResults() {
   }, [query, axiosInstance])
 
   return (
-    <div style={{ padding: '40px' }}>
-      <h2>Результати пошуку: "{query}"</h2>
+    <div className="sr-wrap">
+      <h2 className="sr-title">Результати пошуку: "{query}"</h2>
 
-      {loading && <p>Завантаження...</p>}
+      {loading && <div className="sr-loading">Завантаження...</div>}
 
       {!loading && results.length === 0 && (
-        <div style={{ marginTop: '20px', color: '#d33' }}>
-          Сорян 😕 Квізів за вашим запитом не знайдено
-        </div>
+        <div className="sr-empty">Сорян 😕 Квізів за вашим запитом не знайдено</div>
       )}
 
       {!loading && results.length > 0 && (
-        <ul>
+        <div className="sr-grid">
           {results.map(q => (
-            <li key={q.id}>
-              <Link to={`/quiz/${q.id}`}>{q.title}</Link>
-            </li>
+            <article key={q.id} className="sr-card">
+              <div className="sr-card-body">
+                <h3 className="sr-card-title">
+                  <Link to={`/quiz/${q.id}`} className="sr-link">{q.title}</Link>
+                </h3>
+                { (q.description || q.summary) && <p className="sr-desc">{q.description ?? q.summary}</p> }
+              </div>
+
+              <div className="sr-card-actions">
+                <Link to={`/quiz/${q.id}`} className="btn btn-sm">Open Quiz</Link>
+                <Link to={`/create-room?quizId=${encodeURIComponent(q.id)}`} className="btn btn-sm primary">Create match room</Link>
+              </div>
+            </article>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   )
