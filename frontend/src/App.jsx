@@ -9,6 +9,8 @@ import JoinGame from './components/JoinGame'
 import QuizPlayer from './components/QuizPlayer'
 import QuizResults from './components/QuizResults'
 import Layout from './components/Layout'
+import SearchResults from './components/SearchResults'
+import QuizPage from './components/QuizPage'
 import { AuthProvider } from './context/AuthContext'
 import './App.css'
 
@@ -28,6 +30,8 @@ function App() {
             <Route path="/quizzes/join" element={<JoinGame />} />
             <Route path="/quizzes/play/:quizId" element={<QuizPlayer />} />
             <Route path="/quizzes/results" element={<QuizResults />} />
+            <Route path="/search" element={<SearchResults />} />
+            <Route path="/quiz/:id" element={<QuizPage />} />
           </Routes>
         </Layout>
       </Router>

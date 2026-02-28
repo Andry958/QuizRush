@@ -3,7 +3,8 @@ import axios from 'axios'
 
 const ApiContext = createContext()
 
-export const API_BASE_URL = 'http://localhost:5026'
+// Use the API base that includes the /api mount point and https
+export const API_BASE_URL = 'http://localhost:5026/api'
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,

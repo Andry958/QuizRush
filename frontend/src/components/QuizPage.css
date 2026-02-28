@@ -1,0 +1,28 @@
+.qp-wrap{display:flex;justify-content:center;padding:40px}
+.qp-card{width:100%;max-width:760px;background:linear-gradient(180deg,#fff,#fff);border-radius:16px;box-shadow:0 8px 30px rgba(34,34,34,0.08);padding:28px;border:1px solid #f0f0f3}
+.qp-stars{font-size:18px;color:#f59e0b;margin-bottom:6px;text-align:center}
+.qp-title{font-family:Inter,system-ui,Segoe UI,Roboto,Arial; font-size:22px;margin:0 0 6px;color:#263238}
+.qp-sub{margin:0 0 16px;color:#6b7280}
+.qp-progress{height:10px;background:#f1f5f9;border-radius:999px;overflow:hidden;margin:12px 0}
+.qp-progress-bar{height:100%;background:linear-gradient(90deg,#ffb3c6,#ffd9a6);transition:width .25s ease}
+.qp-question{margin-top:16px}
+.qp-qnum{font-size:13px;color:#475569;margin-bottom:6px}
+.qp-qtext{font-size:18px;margin-bottom:14px;color:#0f172a}
+.qp-options{display:grid;grid-template-columns:1fr;gap:10px}
+.qp-opt{background:#ffffff;border:1px solid #eef2ff;padding:12px 14px;border-radius:12px;text-align:left;cursor:pointer;transition:all .15s ease;display:flex;align-items:center}
+.qp-opt:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(99,102,241,0.08)}
+.qp-opt.selected{background:linear-gradient(90deg,#e9d5ff,#fce7f3);border-color:#d6bcfa}
+.qp-opt-label{font-size:15px;color:#0f172a}
+.qp-nav{display:flex;justify-content:space-between;margin-top:18px}
+.btn{background:#fff;border:1px solid #e6eef8;padding:8px 14px;border-radius:10px;cursor:pointer}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.primary{background:linear-gradient(90deg,#8b5cf6,#f472b6);color:#fff;border:none}
+.btn-link{background:transparent;border:1px dashed #d1d5db;padding:8px 12px}
+.qp-center{text-align:center;padding:40px;color:#374151}
+.results .qp-score{font-size:20px;margin:8px 0 14px;color:#065f46}
+.qp-review{list-style:none;padding:0;margin:12px 0}
+.qp-review-item{padding:12px;border-radius:10px;background:#fbfafc;border:1px solid #f3eff8;margin-bottom:10px}
+.qp-q{font-weight:600;margin-bottom:6px}
+.qp-your{color:#374151}
+.qp-correct{color:#065f46;margin-top:6px}
+.qp-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}

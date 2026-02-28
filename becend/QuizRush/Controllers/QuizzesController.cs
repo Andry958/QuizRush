@@ -16,9 +16,17 @@ namespace QuizRush.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<QuizDto>>> GetAllQuizzes()
+        public async Task<ActionResult<IEnumerable<QuizDto>>> GetAllQuizzes([FromQuery] string? search)
         {
             var quizzes = await _quizService.GetAllQuizzesAsync();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                quizzes = quizzes
+                    .Where(q => q.Title.Contains(search, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
             return Ok(quizzes);
         }
 

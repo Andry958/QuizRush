@@ -80,5 +80,9 @@ namespace DataAccess.Repo
             context.Entry(entity).State = EntityState.Modified;
             await context.SaveChangesAsync();
         }
+        public async Task SaveChangesAsync()
+        {
+            await context.SaveChangesAsync();
+        }
     }
 }
