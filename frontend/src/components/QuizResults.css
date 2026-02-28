@@ -1,0 +1,86 @@
+.results-container {
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #F5F3F7;
+    min-height: calc(100vh - 200px);
+}
+
+.results-card {
+    background: white;
+    width: 100%;
+    max-width: 500px;
+    padding: 50px;
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.results-card h1 {
+    color: #5B4E77;
+    margin-bottom: 30px;
+}
+
+.score-circle {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 10px solid #5B4E77;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 30px;
+}
+
+.score-text {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #333;
+}
+
+.percentage-text {
+    font-size: 1.2rem;
+    color: #666;
+    font-weight: 600;
+}
+
+.feedback-text {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 40px;
+    font-weight: 500;
+}
+
+.results-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.results-actions button {
+    padding: 15px;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn-primary {
+    background: #5B4E77;
+    color: white;
+    border: none;
+}
+
+.btn-secondary {
+    background: white;
+    color: #5B4E77;
+    border: 2px solid #5B4E77;
+}
+
+.results-actions button:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}

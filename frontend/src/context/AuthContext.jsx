@@ -14,7 +14,8 @@ export const AuthProvider = ({ children }) => {
         if (accessToken) {
             const storedNickname = localStorage.getItem('nickname');
             const storedEmail = localStorage.getItem('userEmail');
-            setUser({ email: storedEmail, nickname: storedNickname });
+            const storedUserId = localStorage.getItem('userId');
+            setUser({ email: storedEmail, nickname: storedNickname, id: storedUserId });
         }
         setLoading(false);
     }, [accessToken]);
@@ -22,7 +23,7 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password) => {
         try {
             const response = await axios.post(`${API_BASE_URL}/api/Auth/login`, { email, password });
-            const { accessToken: newAccessToken, refreshToken: newRefreshToken, nickname } = response.data;
+            const { accessToken: newAccessToken, refreshToken: newRefreshToken, nickname, userId } = response.data;
 
             setAccessToken(newAccessToken);
             setRefreshToken(newRefreshToken);
@@ -30,7 +31,8 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem('refreshToken', newRefreshToken);
             localStorage.setItem('nickname', nickname);
             localStorage.setItem('userEmail', email);
-            setUser({ email, nickname });
+            localStorage.setItem('userId', userId);
+            setUser({ email, nickname, id: userId });
             return { success: true };
         } catch (error) {
             console.error('Login error:', error);
@@ -56,6 +58,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('nickname');
         localStorage.removeItem('userEmail');
+        localStorage.removeItem('userId');
     };
 
     const value = {

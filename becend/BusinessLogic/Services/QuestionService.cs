@@ -32,6 +32,7 @@ namespace BusinessLogic.Services
             var question = new Question
             {
                 Text = questionDto.Text,
+                ImageUrl = questionDto.ImageUrl,
                 QuizId = questionDto.QuizId,
                 TimeLimit = questionDto.TimeLimit
             };
@@ -51,6 +52,7 @@ namespace BusinessLogic.Services
             }
 
             question.Text = questionDto.Text;
+            question.ImageUrl = questionDto.ImageUrl;
             question.TimeLimit = questionDto.TimeLimit;
             await _context.SaveChangesAsync();
         }
@@ -80,6 +82,7 @@ namespace BusinessLogic.Services
             {
                 Id = question.Id,
                 Text = question.Text,
+                ImageUrl = question.ImageUrl,
                 QuizId = question.QuizId,
                 TimeLimit = question.TimeLimit
             };

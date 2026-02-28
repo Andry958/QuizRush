@@ -60,6 +60,13 @@ namespace QuizRush.Controllers
             return NoContent();
         }
 
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<QuizDto>>> GetUserQuizzes(string userId)
+        {
+            var quizzes = await _quizService.GetQuizzesByUserIdAsync(userId);
+            return Ok(quizzes);
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteQuiz(int id)
         {

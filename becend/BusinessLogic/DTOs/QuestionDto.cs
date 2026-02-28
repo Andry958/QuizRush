@@ -9,6 +9,7 @@ namespace BusinessLogic.DTOs
         [Required]
         [MaxLength(200)]
         public string Text { get; set; } = string.Empty;
+        public string ImageUrl { get; set; } = string.Empty;
 
         public int QuizId { get; set; }
 

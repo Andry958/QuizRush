@@ -23,6 +23,7 @@ function Layout({ children }) {
             <a href="#about" className="nav-link">About</a>
             {user ? (
               <div className="user-nav">
+                <Link to="/admin/quizzes" className="nav-link" style={{ marginRight: '1.5rem' }}>Admin</Link>
                 <Link to="/profile" className="avatar-link">
                   <div className="header-avatar">
                     {user.nickname?.charAt(0).toUpperCase() || 'U'}

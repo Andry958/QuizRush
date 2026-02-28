@@ -9,5 +9,6 @@ namespace BusinessLogic.Interfaces
         Task<QuizDto> CreateQuizAsync(QuizDto quizDto);
         Task UpdateQuizAsync(int id, QuizDto quizDto);
         Task DeleteQuizAsync(int id);
+        Task<IEnumerable<QuizDto>> GetQuizzesByUserIdAsync(string userId);
     }
 }
