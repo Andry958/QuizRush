@@ -33,7 +33,8 @@ namespace BusinessLogic.Services
             {
                 Title = quizDto.Title,
                 Description = quizDto.Description,
-                CreatedById = quizDto.CreatedById
+                CreatedById = quizDto.CreatedById,
+                ImageUrl = quizDto.ImageUrl
             };
 
             _context.Quizzes.Add(quiz);
@@ -52,6 +53,7 @@ namespace BusinessLogic.Services
 
             quiz.Title = quizDto.Title;
             quiz.Description = quizDto.Description;
+            quiz.ImageUrl = quizDto.ImageUrl;
             
             await _context.SaveChangesAsync();
         }
@@ -66,6 +68,14 @@ namespace BusinessLogic.Services
             }
         }
 
+        public async Task<IEnumerable<QuizDto>> GetQuizzesByUserIdAsync(string userId)
+        {
+            var quizzes = await _context.Quizzes
+                .Where(q => q.CreatedById == userId)
+                .ToListAsync();
+            return quizzes.Select(MapToDto);
+        }
+
         private static QuizDto MapToDto(Quiz quiz)
         {
             return new QuizDto
@@ -73,7 +83,8 @@ namespace BusinessLogic.Services
                 Id = quiz.Id,
                 Title = quiz.Title,
                 Description = quiz.Description,
-                CreatedById = quiz.CreatedById
+                CreatedById = quiz.CreatedById,
+                ImageUrl = quiz.ImageUrl
             };
         }
     }

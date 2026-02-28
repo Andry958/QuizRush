@@ -1,9 +1,37 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import axios from 'axios';
 import './Profile.css';
 
 const Profile = () => {
     const { user, logout } = useAuth();
+    const [stats, setStats] = useState({
+        quizzesCreated: 0,
+        gamesPlayed: 0,
+        totalScore: 0
+    });
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (user && user.id) {
+            fetchUserStats();
+        }
+    }, [user]);
+
+    const fetchUserStats = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.get(`http://localhost:5026/api/Quizzes/user/${user.id}`);
+            setStats(prev => ({
+                ...prev,
+                quizzesCreated: response.data.length
+            }));
+            setLoading(false);
+        } catch (err) {
+            console.error('Error fetching user stats:', err);
+            setLoading(false);
+        }
+    };
 
     if (!user) {
         return (
@@ -28,15 +56,15 @@ const Profile = () => {
 
                 <div className="profile-stats">
                     <div className="stat-item">
-                        <span className="stat-value">0</span>
+                        <span className="stat-value">{loading ? '...' : stats.quizzesCreated}</span>
                         <span className="stat-label">Quizzes Created</span>
                     </div>
                     <div className="stat-item">
-                        <span className="stat-value">0</span>
+                        <span className="stat-value">{stats.gamesPlayed}</span>
                         <span className="stat-label">Games Played</span>
                     </div>
                     <div className="stat-item">
-                        <span className="stat-value">0</span>
+                        <span className="stat-value">{stats.totalScore}</span>
                         <span className="stat-label">Total Score</span>
                     </div>
                 </div>

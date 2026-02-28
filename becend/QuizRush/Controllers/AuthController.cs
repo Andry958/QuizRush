@@ -77,6 +77,7 @@ namespace QuizRush.Controllers
             {
                 accessToken,
                 refreshToken,
+                userId = user.Id,
                 nickname = user.UserName
             });
         }
@@ -117,6 +118,7 @@ namespace QuizRush.Controllers
             {
                 accessToken = newAccessToken,
                 refreshToken = newRefreshToken,
+                userId = user.Id,
                 nickname = user.UserName
             });
         }

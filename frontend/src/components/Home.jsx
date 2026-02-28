@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import Layout from './Layout'
 import './Home.css'
 
@@ -14,12 +15,12 @@ function Home() {
             Improve your knowledge and have fun!
           </p>
           <div className="hero-buttons">
-            <button className="btn-primary">
+            <Link to="/admin/quizzes/create" className="btn-primary" style={{ textDecoration: 'none' }}>
               Create Quiz
-            </button>
-            <button className="btn-secondary">
+            </Link>
+            <Link to="/quizzes/join" className="btn-secondary" style={{ textDecoration: 'none' }}>
               Join Game
-            </button>
+            </Link>
           </div>
         </div>
       </section>
