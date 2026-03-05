@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
-            const response = await axios.post(`${API_BASE_URL}/api/Auth/login`, { email, password });
+            const response = await axios.post(`${API_BASE_URL}/Auth/login`, { email, password });
             const { accessToken: newAccessToken, refreshToken: newRefreshToken, nickname, userId } = response.data;
 
             setAccessToken(newAccessToken);
@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }) => {
 
     const register = async (email, nickname, password) => {
         try {
-            await axios.post(`${API_BASE_URL}/api/Auth/register`, { email, nickname, password });
+            await axios.post(`${API_BASE_URL}/Auth/register`, { email, nickname, password });
             return { success: true };
         } catch (error) {
             console.error('Registration error:', error);

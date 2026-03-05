@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { API_BASE_URL } from '../context/ApiContext';
 import noImage from '../assets/no-image.jpg';
 import './AdminQuizList.css';
 
@@ -16,7 +17,7 @@ const AdminQuizList = () => {
     const fetchQuizzes = async () => {
         try {
             setLoading(true);
-            const response = await axios.get('http://localhost:5026/api/Quizzes'); 
+            const response = await axios.get(`${API_BASE_URL}/Quizzes`);
             setQuizzes(response.data);
             setLoading(false);
         } catch (err) {
@@ -29,7 +30,7 @@ const AdminQuizList = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this quiz?')) {
             try {
-                await axios.delete(`http://localhost:5026/api/Quizzes/${id}`);
+                await axios.delete(`${API_BASE_URL}/Quizzes/${id}`);
                 setQuizzes(quizzes.filter(q => q.id !== id));
             } catch (err) {
                 console.error('Error deleting quiz:', err);

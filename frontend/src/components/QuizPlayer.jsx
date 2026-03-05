@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../context/ApiContext';
 import axios from 'axios';
 import './QuizPlayer.css';
 
@@ -74,12 +75,12 @@ const QuizPlayer = () => {
     const fetchQuizDetails = async () => {
         try {
             setLoading(true);
-            const quizResponse = await axios.get(`http://localhost:5026/api/Quizzes/${quizId}`);
+            const quizResponse = await axios.get(`${API_BASE_URL}/Quizzes/${quizId}`);
             setQuiz(quizResponse.data);
 
-            const questionsResponse = await axios.get(`http://localhost:5026/api/Questions/quiz/${quizId}`);
+            const questionsResponse = await axios.get(`${API_BASE_URL}/Questions/quiz/${quizId}`);
             const qData = await Promise.all(questionsResponse.data.map(async (q) => {
-                const answersResponse = await axios.get(`http://localhost:5026/api/Answers/question/${q.id}`);
+                const answersResponse = await axios.get(`${API_BASE_URL}/Answers/question/${q.id}`);
                 return { ...q, answers: answersResponse.data };
             }));
 

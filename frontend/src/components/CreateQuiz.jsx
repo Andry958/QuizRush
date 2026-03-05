@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { API_BASE_URL } from '../context/ApiContext';
 import { useAuth } from '../context/AuthContext';
 import './CreateQuiz.css';
 
@@ -27,15 +28,15 @@ const CreateQuiz = () => {
     const fetchQuizData = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`http://localhost:5026/api/Quizzes/${id}`);
+            const response = await axios.get(`${API_BASE_URL}/Quizzes/${id}`);
             const quiz = response.data;
             setTitle(quiz.title);
             setDescription(quiz.description || '');
             setImageUrl(quiz.imageUrl || '');
 
-            const questionsResponse = await axios.get(`http://localhost:5026/api/Questions/quiz/${id}`);
+            const questionsResponse = await axios.get(`${API_BASE_URL}/Questions/quiz/${id}`);
             const questionsData = await Promise.all(questionsResponse.data.map(async (q) => {
-                const answersResponse = await axios.get(`http://localhost:5026/api/Answers/question/${q.id}`);
+                const answersResponse = await axios.get(`${API_BASE_URL}/Answers/question/${q.id}`);
                 return {
                     id: q.id,
                     text: q.text,
@@ -119,9 +120,9 @@ const CreateQuiz = () => {
 
             let quizId = id;
             if (isEditMode) {
-                await axios.put(`http://localhost:5026/api/Quizzes/${id}`, quizData);
+                await axios.put(`${API_BASE_URL}/Quizzes/${id}`, quizData);
             } else {
-                const response = await axios.post('http://localhost:5026/api/Quizzes', quizData);
+                const response = await axios.post(`${API_BASE_URL}/Quizzes`, quizData);
                 quizId = response.data.id;
             }
 
@@ -138,9 +139,9 @@ const CreateQuiz = () => {
 
                 let qId = q.id;
                 if (q.id) {
-                    await axios.put(`http://localhost:5026/api/Questions/${q.id}`, questionData);
+                    await axios.put(`${API_BASE_URL}/Questions/${q.id}`, questionData);
                 } else {
-                    const qResponse = await axios.post('http://localhost:5026/api/Questions', questionData);
+                    const qResponse = await axios.post(`${API_BASE_URL}/Questions`, questionData);
                     qId = qResponse.data.id;
                 }
 
@@ -153,9 +154,9 @@ const CreateQuiz = () => {
                     };
 
                     if (a.id) {
-                        await axios.put(`http://localhost:5026/api/Answers/${a.id}`, answerData);
+                        await axios.put(`${API_BASE_URL}/Answers/${a.id}`, answerData);
                     } else {
-                        await axios.post('http://localhost:5026/api/Answers', answerData);
+                        await axios.post(`${API_BASE_URL}/Answers`, answerData);
                     }
                 }
             }

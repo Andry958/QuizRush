@@ -14,10 +14,6 @@ function Layout({ children }) {
   const [loading, setLoading] = useState(false)
   const debounceRef = useRef(null)
 
-  const handleLogout = () => {
-    logout()
-    navigate('/')
-  }
 
   // Функція пошуку
   const fetchSearch = async (searchTerm) => {
@@ -108,9 +104,6 @@ function Layout({ children }) {
                     {user.nickname?.charAt(0).toUpperCase() || 'U'}
                   </div>
                 </Link>
-                <button onClick={handleLogout} className="btn-logout">
-                  Logout
-                </button>
               </div>
             ) : (
               <div className="auth-nav">

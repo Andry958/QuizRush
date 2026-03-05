@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../context/ApiContext';
 import { useNavigate } from 'react-router-dom';
 import noImage from '../assets/no-image.jpg';
 import './JoinGame.css';
@@ -17,7 +18,7 @@ const JoinGame = () => {
     const fetchQuizzes = async () => {
         try {
             setLoading(true);
-            const response = await axios.get('http://localhost:5026/api/Quizzes');
+            const response = await axios.get(`${API_BASE_URL}/Quizzes`);
             setQuizzes(response.data);
             setLoading(false);
         } catch (err) {

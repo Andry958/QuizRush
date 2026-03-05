@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { API_BASE_URL } from '../context/ApiContext';
 import axios from 'axios';
 import './Profile.css';
 
@@ -21,7 +22,7 @@ const Profile = () => {
     const fetchUserStats = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`http://localhost:5026/api/Quizzes/user/${user.id}`);
+            const response = await axios.get(`${API_BASE_URL}/Quizzes/user/${user.id}`);
             setStats(prev => ({
                 ...prev,
                 quizzesCreated: response.data.length

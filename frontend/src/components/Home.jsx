@@ -1,8 +1,30 @@
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+import { API_BASE_URL } from '../context/ApiContext'
+import noImage from '../assets/no-image.jpg'
 import { Link } from 'react-router-dom'
 import Layout from './Layout'
 import './Home.css'
 
 function Home() {
+  const [recommendedQuizzes, setRecommendedQuizzes] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchRecommended = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/Quizzes`)
+        // Take latest 10 quizzes
+        const latest = response.data.reverse().slice(0, 10)
+        setRecommendedQuizzes(latest)
+      } catch (error) {
+        console.error('Error fetching recommended quizzes:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchRecommended()
+  }, [])
   return (
     <>
       <section className="hero-section">
@@ -22,6 +44,35 @@ function Home() {
               Join Game
             </Link>
           </div>
+        </div>
+      </section>
+
+      <section className="recommendations-section">
+        <div className="section-header-row">
+          <h2 className="section-title-small">Featured Quizzes</h2>
+          <Link to="/quizzes/join" className="view-all-link">View All →</Link>
+        </div>
+        <div className="quiz-ribbon-container">
+          {loading ? (
+            <div className="ribbon-loading">Loading quizzes...</div>
+          ) : (
+            <div className="quiz-ribbon">
+              {recommendedQuizzes.map((quiz) => (
+                <Link key={quiz.id} to={`/quiz/${quiz.id}`} className="ribbon-card">
+                  <div className="ribbon-card-image">
+                    <img src={quiz.imageUrl || noImage} alt={quiz.title} />
+                  </div>
+                  <div className="ribbon-card-content">
+                    <h3>{quiz.title}</h3>
+                    <p>{quiz.description || 'No description'}</p>
+                  </div>
+                </Link>
+              ))}
+              {recommendedQuizzes.length === 0 && !loading && (
+                <div className="no-quizzes-message">No quizzes available yet.</div>
+              )}
+            </div>
+          )}
         </div>
       </section>
 
