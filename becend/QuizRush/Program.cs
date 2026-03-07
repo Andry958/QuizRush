@@ -32,6 +32,7 @@ builder.Services.AddScoped<IQuizSessionGameService, QuizSessionGameService>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<IQuizService, QuizSessionService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -50,7 +51,8 @@ builder.Services.AddCors(options =>
             "http://localhost:3001",
             "https://localhost:7188")
             .AllowAnyMethod()
-            .AllowAnyHeader();
+            .AllowAnyHeader()
+            .AllowCredentials();
     });
 });
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");

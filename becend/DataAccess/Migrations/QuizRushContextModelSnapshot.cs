@@ -199,6 +199,48 @@ namespace DataAccess.Migrations
                     b.ToTable("Quizzes");
                 });
 
+            modelBuilder.Entity("DataAccess.Models.QuizAttempt", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CompletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CorrectAnswers")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuizId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalQuestions")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuizId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("QuizAttempts");
+                });
+
             modelBuilder.Entity("DataAccess.Models.RefreshToken", b =>
                 {
                     b.Property<int>("Id")
@@ -503,6 +545,25 @@ namespace DataAccess.Migrations
                     b.Navigation("CreatedBy");
                 });
 
+            modelBuilder.Entity("DataAccess.Models.QuizAttempt", b =>
+                {
+                    b.HasOne("DataAccess.Models.Quiz", "Quiz")
+                        .WithMany("QuizAttempts")
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("DataAccess.Models.User", "User")
+                        .WithMany("QuizAttempts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Quiz");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("DataAccess.Models.RefreshToken", b =>
                 {
                     b.HasOne("DataAccess.Models.User", "User")
@@ -585,6 +646,8 @@ namespace DataAccess.Migrations
                     b.Navigation("GameSessions");
 
                     b.Navigation("Questions");
+
+                    b.Navigation("QuizAttempts");
                 });
 
             modelBuilder.Entity("DataAccess.Models.User", b =>
@@ -592,6 +655,8 @@ namespace DataAccess.Migrations
                     b.Navigation("CreatedQuizzes");
 
                     b.Navigation("GameSessions");
+
+                    b.Navigation("QuizAttempts");
 
                     b.Navigation("RefreshTokens");
                 });

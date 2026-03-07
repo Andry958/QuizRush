@@ -11,5 +11,6 @@ namespace DataAccess.Models
 
         public List<Question> Questions { get; set; } = new();
         public List<GameSession> GameSessions { get; set; } = new();
+        public List<QuizAttempt> QuizAttempts { get; set; } = new();
     }
 }

@@ -49,7 +49,48 @@
 .feedback-text {
     font-size: 1.2rem;
     color: #555;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
+    font-weight: 500;
+}
+
+.results-details {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background: white;
+    border-radius: 8px;
+    border-left: 3px solid #5B4E77;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.detail-value {
+    font-weight: 700;
+    color: #5B4E77;
+    font-size: 1rem;
+}
+
+.error-message {
+    background: #fee;
+    color: #c33;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
     font-weight: 500;
 }
 
