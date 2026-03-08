@@ -44,7 +44,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Answers");
+                    b.ToTable("Answers", (string)null);
                 });
 
             modelBuilder.Entity("DataAccess.Models.AnsweredQuestion", b =>
@@ -74,7 +74,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("PlayerId");
 
-                    b.ToTable("AnsweredQuestions");
+                    b.ToTable("AnsweredQuestions", (string)null);
                 });
 
             modelBuilder.Entity("DataAccess.Models.GameSession", b =>
@@ -111,7 +111,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("QuizId");
 
-                    b.ToTable("GameSessions");
+                    b.ToTable("GameSessions", (string)null);
                 });
 
             modelBuilder.Entity("DataAccess.Models.Player", b =>
@@ -136,7 +136,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("GameSessionId");
 
-                    b.ToTable("Players");
+                    b.ToTable("Players", (string)null);
                 });
 
             modelBuilder.Entity("DataAccess.Models.Question", b =>
@@ -165,7 +165,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("QuizId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Questions", (string)null);
                 });
 
             modelBuilder.Entity("DataAccess.Models.Quiz", b =>
@@ -196,7 +196,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("CreatedById");
 
-                    b.ToTable("Quizzes");
+                    b.ToTable("Quizzes", (string)null);
                 });
 
             modelBuilder.Entity("DataAccess.Models.QuizAttempt", b =>
@@ -238,7 +238,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("QuizAttempts");
+                    b.ToTable("QuizAttempts", (string)null);
                 });
 
             modelBuilder.Entity("DataAccess.Models.RefreshToken", b =>
@@ -270,7 +270,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("RefreshTokens", (string)null);
                 });
 
             modelBuilder.Entity("DataAccess.Models.User", b =>

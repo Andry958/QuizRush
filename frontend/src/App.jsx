@@ -11,6 +11,7 @@ import QuizResults from './components/QuizResults'
 import Layout from './components/Layout'
 import SearchResults from './components/SearchResults'
 import QuizPage from './components/QuizPage'
+import Leaderboard from './components/Leaderboard'
 import { AuthProvider } from './context/AuthContext'
 import './App.css'
 
@@ -32,6 +33,7 @@ function App() {
             <Route path="/quizzes/results" element={<QuizResults />} />
             <Route path="/search" element={<SearchResults />} />
             <Route path="/quiz/:id" element={<QuizPage />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
           </Routes>
         </Layout>
       </Router>

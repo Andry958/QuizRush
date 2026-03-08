@@ -93,6 +93,7 @@ function Layout({ children }) {
 
           <nav className="nav-menu">
             <Link to="/" className="nav-link">Home</Link>
+            <Link to="/leaderboard" className="nav-link">Leaderboard</Link>
             <a href="#features" className="nav-link">Features</a>
             <a href="#about" className="nav-link">About</a>
 

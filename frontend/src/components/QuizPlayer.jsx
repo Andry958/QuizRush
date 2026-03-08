@@ -9,7 +9,7 @@ const QuizPlayer = () => {
     const { quizId } = useParams();
     const navigate = useNavigate();
     const { user, accessToken, loading: authLoading } = useAuth();
-    
+
     const [quiz, setQuiz] = useState(null);
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -82,7 +82,7 @@ const QuizPlayer = () => {
 
     const saveQuizAttempt = async (finalScore, finalCorrectAnswers) => {
         if (isSubmitting) return;
-        
+
         if (!accessToken) {
             console.error('No access token available');
             navigate('/login', { state: { from: `/quizzes/${quizId}` } });
@@ -95,7 +95,7 @@ const QuizPlayer = () => {
             const duration = Math.round((Date.now() - startTime) / 1000); // Duration in seconds
 
             const response = await axios.post(
-                'http://localhost:5026/api/leaderboard/attempt',
+                `${API_BASE_URL}/leaderboard/attempt`,
                 {
                     quizId: parseInt(quizId),
                     score: finalScore,
@@ -107,8 +107,7 @@ const QuizPlayer = () => {
                 {
                     headers: {
                         Authorization: `Bearer ${accessToken}`
-                    },
-                    withCredentials: true
+                    }
                 }
             );
 
@@ -127,20 +126,22 @@ const QuizPlayer = () => {
             });
         } catch (err) {
             console.error('Error saving quiz attempt:', err);
-            
+            const serverError = err.response?.data?.details || err.response?.data?.message || 'Failed to save to leaderboard';
+            console.error('Server error details:', serverError);
+
             if (err.response?.status === 401) {
                 console.error('Token expired or invalid. Redirecting to login.');
                 navigate('/login', { state: { from: `/quizzes/${quizId}`, message: 'Your session has expired. Please login again.' } });
                 return;
             }
-            
+
             navigate('/quizzes/results', {
                 state: {
                     score: finalScore,
                     total: questions.length,
                     quizId: parseInt(quizId),
                     correctAnswers: finalCorrectAnswers,
-                    error: 'Failed to save to leaderboard'
+                    error: serverError
                 }
             });
         } finally {

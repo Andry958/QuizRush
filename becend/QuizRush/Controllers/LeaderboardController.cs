@@ -26,8 +26,8 @@ namespace QuizRush.Controllers
                 return Ok(topPlayers);
             }
             catch (Exception ex){
-                _logger.LogError($"Error getting top 10 players: {ex.Message}");
-                return StatusCode(500, new { message = "Internal server error" });
+                _logger.LogError(ex, "Error getting top 10 players");
+                return StatusCode(500, new { message = "Error getting leaderboard" });
             }
         }
         [HttpGet("quiz/{quizId}/top10")]
@@ -38,8 +38,8 @@ namespace QuizRush.Controllers
                 return Ok(topPlayers);
             }
             catch (Exception ex){
-                _logger.LogError($"Error getting top 10 players by quiz {quizId}: {ex.Message}");
-                return StatusCode(500, new { message = "Internal server error" });
+                _logger.LogError(ex, $"Error getting top 10 players by quiz {quizId}");
+                return StatusCode(500, new { message = "Error getting quiz leaderboard" });
             }
         }
         [HttpGet("user/{userId}")]
@@ -54,8 +54,8 @@ namespace QuizRush.Controllers
                 return NotFound(new { message = ex.Message });
             }
             catch (Exception ex){
-                _logger.LogError($"Error getting user statistics for {userId}: {ex.Message}");
-                return StatusCode(500, new { message = "Internal server error" });
+                _logger.LogError(ex, $"Error getting user statistics for {userId}");
+                return StatusCode(500, new { message = "Error getting user statistics" });
             }
         }
 
@@ -73,8 +73,8 @@ namespace QuizRush.Controllers
                 return Ok(history);
             }
             catch (Exception ex) { 
-                _logger.LogError($"Error getting user attempts history for {userId}: {ex.Message}");
-                return StatusCode(500, new { message = "Internal server error" });
+                _logger.LogError(ex, $"Error getting user attempts history for {userId}");
+                return StatusCode(500, new { message = "Error getting user history" });
             }
         }
 
@@ -89,8 +89,8 @@ namespace QuizRush.Controllers
                 return Ok(popularQuizzes);
             }
             catch (Exception ex){
-                _logger.LogError($"Error getting popular quizzes: {ex.Message}");
-                return StatusCode(500, new { message = "Internal server error" });
+                _logger.LogError(ex, "Error getting popular quizzes");
+                return StatusCode(500, new { message = "Error getting popular quizzes" });
             }
         }
 
@@ -106,8 +106,8 @@ namespace QuizRush.Controllers
                 return NotFound(new { message = ex.Message });
             }
             catch (Exception ex){
-                _logger.LogError($"Error getting quiz statistics for {quizId}: {ex.Message}");
-                return StatusCode(500, new { message = "Internal server error" });
+                _logger.LogError(ex, $"Error getting quiz statistics for {quizId}");
+                return StatusCode(500, new { message = "Error getting quiz statistics" });
             }
         }
 
@@ -122,8 +122,8 @@ namespace QuizRush.Controllers
                 return Ok(new { position });
             }
             catch (Exception ex){
-                _logger.LogError($"Error getting user leaderboard position for {userId}: {ex.Message}");
-                return StatusCode(500, new { message = "Internal server error" });
+                _logger.LogError(ex, $"Error getting user leaderboard position for {userId}");
+                return StatusCode(500, new { message = "Error getting leaderboard position" });
             }
         }
 
@@ -161,8 +161,8 @@ namespace QuizRush.Controllers
                 return Ok(new { id = attemptId, message = "Quiz attempt saved successfully" });
             }
             catch (Exception ex){
-                _logger.LogError($"Error saving quiz attempt: {ex.Message}");
-                return StatusCode(500, new { message = "Internal server error" });
+                _logger.LogError(ex, $"Error saving quiz attempt for quiz {request.QuizId}");
+                return StatusCode(500, new { message = "Internal server error", details = ex.Message });
             }
         }
 
@@ -183,8 +183,8 @@ namespace QuizRush.Controllers
                 return NotFound(new { message = ex.Message });
             }
             catch (Exception ex){
-                _logger.LogError($"Error getting current user statistics: {ex.Message}");
-                return StatusCode(500, new { message = "Internal server error" });
+                _logger.LogError(ex, "Error getting current user statistics");
+                return StatusCode(500, new { message = "Error getting user statistics" });
             }
         }
 
@@ -203,8 +203,8 @@ namespace QuizRush.Controllers
                 return Ok(new { position });
             }
             catch (Exception ex){
-                _logger.LogError($"Error getting current user leaderboard position: {ex.Message}");
-                return StatusCode(500, new { message = "Internal server error" });
+                _logger.LogError(ex, "Error getting current user leaderboard position");
+                return StatusCode(500, new { message = "Error getting leaderboard position" });
             }
         }
     }

@@ -22,11 +22,23 @@ const Profile = () => {
     const fetchUserStats = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${API_BASE_URL}/Quizzes/user/${user.id}`);
-            setStats(prev => ({
-                ...prev,
-                quizzesCreated: response.data.length
-            }));
+            // Fetch quizzes created
+            const quizzesRes = await axios.get(`${API_BASE_URL}/Quizzes/user/${user.id}`);
+
+            // Fetch game statistics
+            let gameStats = { totalAttempts: 0, averageScore: 0 };
+            try {
+                const leaderRes = await axios.get(`${API_BASE_URL}/Leaderboard/user/${user.id}`);
+                gameStats = leaderRes.data;
+            } catch (e) {
+                console.warn('No leaderboard stats found for user yet');
+            }
+
+            setStats({
+                quizzesCreated: quizzesRes.data.length,
+                gamesPlayed: gameStats.totalAttempts,
+                totalScore: gameStats.averageScore
+            });
             setLoading(false);
         } catch (err) {
             console.error('Error fetching user stats:', err);
@@ -66,7 +78,7 @@ const Profile = () => {
                     </div>
                     <div className="stat-item">
                         <span className="stat-value">{stats.totalScore}</span>
-                        <span className="stat-label">Total Score</span>
+                        <span className="stat-label">Avg Score</span>
                     </div>
                 </div>
 
