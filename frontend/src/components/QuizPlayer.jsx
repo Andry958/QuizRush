@@ -3,12 +3,17 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../context/ApiContext';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { useBlockchain } from '../context/BlockchainContext';
 import './QuizPlayer.css';
 
 const QuizPlayer = () => {
     const { quizId } = useParams();
     const navigate = useNavigate();
     const { user, accessToken, loading: authLoading } = useAuth();
+    const { account, connectWallet, checkPaymentStatus, payForQuiz, loading: blockchainLoading, error: blockchainError } = useBlockchain();
+
+    const [hasPaid, setHasPaid] = useState(false);
+    const [checkingPayment, setCheckingPayment] = useState(true);
 
     const [quiz, setQuiz] = useState(null);
     const [questions, setQuestions] = useState([]);
@@ -32,8 +37,41 @@ const QuizPlayer = () => {
     }, [authLoading, accessToken, navigate, quizId]);
 
     useEffect(() => {
-        fetchQuizDetails();
-    }, [quizId]);
+        if (quizId && account) {
+            verifyPayment();
+        } else if (!blockchainLoading && !account) {
+            setCheckingPayment(false);
+        }
+    }, [quizId, account, blockchainLoading]);
+
+    const verifyPayment = async () => {
+        try {
+            setCheckingPayment(true);
+            const paid = await checkPaymentStatus(parseInt(quizId));
+            setHasPaid(paid);
+        } catch (err) {
+            console.error("Error verifying payment:", err);
+        } finally {
+            setCheckingPayment(false);
+        }
+    };
+
+    const handlePayment = async () => {
+        if (!account) {
+            await connectWallet();
+            return;
+        }
+        const success = await payForQuiz(parseInt(quizId));
+        if (success) {
+            setHasPaid(true);
+        }
+    };
+
+    useEffect(() => {
+        if (hasPaid) {
+            fetchQuizDetails();
+        }
+    }, [quizId, hasPaid]);
 
     useEffect(() => {
         if (questions.length > 0 && currentQuestionIndex < questions.length) {
@@ -195,7 +233,41 @@ const QuizPlayer = () => {
         }, 1500);
     };
 
-    if (authLoading) return <div className="player-container"><p>Loading authentication...</p></div>;
+    if (authLoading || checkingPayment || (blockchainLoading && !account))
+        return <div className="player-container"><div className="loading-card"><p>Checking status...</p></div></div>;
+
+    if (!account) {
+        return (
+            <div className="player-container">
+                <div className="payment-card">
+                    <h3>Blockchain Connection Required</h3>
+                    <p>To participate in this quiz, you need to connect your MetaMask wallet and pay the entry fee.</p>
+                    <button className="btn-connect" onClick={connectWallet}>Connect Wallet</button>
+                    {blockchainError && <p className="error-text">{blockchainError}</p>}
+                </div>
+            </div>
+        );
+    }
+
+    if (!hasPaid) {
+        return (
+            <div className="player-container">
+                <div className="payment-card">
+                    <h3>Entry Fee Required</h3>
+                    <p>This quiz requires a 1 ETH entry fee to participate.</p>
+                    <div className="payment-details">
+                        <span>Fee: 1.0 ETH</span>
+                        <span>Quiz ID: {quizId}</span>
+                    </div>
+                    <button className="btn-pay" onClick={handlePayment} disabled={blockchainLoading}>
+                        {blockchainLoading ? 'Processing...' : 'Pay 1 ETH to Start'}
+                    </button>
+                    {blockchainError && <p className="error-text">{blockchainError}</p>}
+                </div>
+            </div>
+        );
+    }
+
     if (loading) return <div className="player-container"><p>Preparing quiz...</p></div>;
     if (error) return <div className="player-container"><p className="error">{error}</p></div>;
     if (questions.length === 0) return <div className="player-container"><p>This quiz has no questions.</p></div>;
