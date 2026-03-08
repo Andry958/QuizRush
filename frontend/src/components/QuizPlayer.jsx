@@ -2,15 +2,19 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../context/ApiContext';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 import './QuizPlayer.css';
 
 const QuizPlayer = () => {
     const { quizId } = useParams();
     const navigate = useNavigate();
+    const { user, accessToken, loading: authLoading } = useAuth();
+    
     const [quiz, setQuiz] = useState(null);
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [score, setScore] = useState(0);
+    const [correctAnswers, setCorrectAnswers] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedAnswerId, setSelectedAnswerId] = useState(null);
@@ -18,6 +22,14 @@ const QuizPlayer = () => {
 
     const [timeLeft, setTimeLeft] = useState(30);
     const [timerActive, setTimerActive] = useState(false);
+    const [startTime] = useState(Date.now());
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    useEffect(() => {
+        if (!authLoading && !accessToken) {
+            navigate('/login', { state: { from: `/quizzes/${quizId}` } });
+        }
+    }, [authLoading, accessToken, navigate, quizId]);
 
     useEffect(() => {
         fetchQuizDetails();
@@ -63,12 +75,76 @@ const QuizPlayer = () => {
             setShowCorrection(false);
             setTimerActive(true);
         } else {
+            // Quiz finished - save to leaderboard
+            saveQuizAttempt(score + (wasCorrect ? 1 : 0), correctAnswers + (wasCorrect ? 1 : 0));
+        }
+    };
+
+    const saveQuizAttempt = async (finalScore, finalCorrectAnswers) => {
+        if (isSubmitting) return;
+        
+        if (!accessToken) {
+            console.error('No access token available');
+            navigate('/login', { state: { from: `/quizzes/${quizId}` } });
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        try {
+            const duration = Math.round((Date.now() - startTime) / 1000); // Duration in seconds
+
+            const response = await axios.post(
+                'http://localhost:5026/api/leaderboard/attempt',
+                {
+                    quizId: parseInt(quizId),
+                    score: finalScore,
+                    correctAnswers: finalCorrectAnswers,
+                    totalQuestions: questions.length,
+                    duration: duration,
+                    rating: 0 // Default rating, user can rate later
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    },
+                    withCredentials: true
+                }
+            );
+
+            console.log('Quiz attempt saved successfully:', response.data);
+
+            // Navigate to results with data
             navigate('/quizzes/results', {
                 state: {
-                    score: score + (wasCorrect ? 1 : 0),
-                    total: questions.length
+                    score: finalScore,
+                    total: questions.length,
+                    quizId: parseInt(quizId),
+                    duration: duration,
+                    correctAnswers: finalCorrectAnswers,
+                    attemptId: response.data.id
                 }
             });
+        } catch (err) {
+            console.error('Error saving quiz attempt:', err);
+            
+            if (err.response?.status === 401) {
+                console.error('Token expired or invalid. Redirecting to login.');
+                navigate('/login', { state: { from: `/quizzes/${quizId}`, message: 'Your session has expired. Please login again.' } });
+                return;
+            }
+            
+            navigate('/quizzes/results', {
+                state: {
+                    score: finalScore,
+                    total: questions.length,
+                    quizId: parseInt(quizId),
+                    correctAnswers: finalCorrectAnswers,
+                    error: 'Failed to save to leaderboard'
+                }
+            });
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -108,6 +184,7 @@ const QuizPlayer = () => {
         const isCorrect = selectedAnswer.isCorrect;
         if (isCorrect) {
             setScore(score + 1);
+            setCorrectAnswers(correctAnswers + 1);
         }
 
         setShowCorrection(true);
@@ -117,6 +194,7 @@ const QuizPlayer = () => {
         }, 1500);
     };
 
+    if (authLoading) return <div className="player-container"><p>Loading authentication...</p></div>;
     if (loading) return <div className="player-container"><p>Preparing quiz...</p></div>;
     if (error) return <div className="player-container"><p className="error">{error}</p></div>;
     if (questions.length === 0) return <div className="player-container"><p>This quiz has no questions.</p></div>;

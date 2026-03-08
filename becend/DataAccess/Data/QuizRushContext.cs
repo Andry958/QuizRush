@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
 
@@ -6,7 +6,6 @@ namespace DataAccess.Data
 {
     public class QuizRushContext : IdentityDbContext<User>
     {
-        public DbSet<User> Users { get; set; }
         public DbSet<Quiz> Quizzes { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
@@ -14,6 +13,7 @@ namespace DataAccess.Data
         public DbSet<Player> Players { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<AnsweredQuestion> AnsweredQuestions { get; set; }
+        public DbSet<QuizAttempt> QuizAttempts { get; set; }
 
         public QuizRushContext(DbContextOptions<QuizRushContext> options)
             : base(options)
@@ -24,53 +24,68 @@ namespace DataAccess.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // User -> Quiz (One to Many)
+            // User -> Quiz
             modelBuilder.Entity<Quiz>()
                 .HasOne(q => q.CreatedBy)
                 .WithMany(u => u.CreatedQuizzes)
                 .HasForeignKey(q => q.CreatedById)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Quiz -> Question (One to Many)
+            // Quiz -> Question
             modelBuilder.Entity<Question>()
                 .HasOne(q => q.Quiz)
                 .WithMany(quiz => quiz.Questions)
                 .HasForeignKey(q => q.QuizId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Question -> Answer (One to Many)
+            // Question -> Answer
             modelBuilder.Entity<Answer>()
                 .HasOne(a => a.Question)
                 .WithMany(q => q.Answers)
                 .HasForeignKey(a => a.QuestionId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Quiz -> GameSession (One to Many)
+            // Quiz -> GameSession
             modelBuilder.Entity<GameSession>()
                 .HasOne(gs => gs.Quiz)
                 .WithMany(q => q.GameSessions)
                 .HasForeignKey(gs => gs.QuizId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // User -> GameSession (One to Many)
+            // User -> GameSession
             modelBuilder.Entity<GameSession>()
                 .HasOne(gs => gs.CreatedBy)
                 .WithMany(u => u.GameSessions)
                 .HasForeignKey(gs => gs.CreatedById)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
-            // GameSession -> Player (One to Many)
+            // GameSession -> Player
             modelBuilder.Entity<Player>()
                 .HasOne(p => p.GameSession)
                 .WithMany(gs => gs.Players)
                 .HasForeignKey(p => p.GameSessionId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // RefreshToken -> User
             modelBuilder.Entity<RefreshToken>()
                 .HasOne(rt => rt.User)
                 .WithMany(u => u.RefreshTokens)
                 .HasForeignKey(rt => rt.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // User -> QuizAttempt
+            modelBuilder.Entity<QuizAttempt>()
+                .HasOne(qa => qa.User)
+                .WithMany(u => u.QuizAttempts)
+                .HasForeignKey(qa => qa.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Quiz -> QuizAttempt
+            modelBuilder.Entity<QuizAttempt>()
+                .HasOne(qa => qa.Quiz)
+                .WithMany(q => q.QuizAttempts)
+                .HasForeignKey(qa => qa.QuizId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

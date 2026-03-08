@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(QuizRushContext))]
-    [Migration("20260228164550_AddImageUrlToQuestion")]
-    partial class AddImageUrlToQuestion
+    [Migration("20260307084953_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,6 +50,36 @@ namespace DataAccess.Migrations
                     b.ToTable("Answers");
                 });
 
+            modelBuilder.Entity("DataAccess.Models.AnsweredQuestion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PlayerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SelectedAnswerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlayerId");
+
+                    b.ToTable("AnsweredQuestions");
+                });
+
             modelBuilder.Entity("DataAccess.Models.GameSession", b =>
                 {
                     b.Property<int>("Id")
@@ -61,6 +91,9 @@ namespace DataAccess.Migrations
                     b.Property<string>("CreatedById")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("CurrentQuestionIndex")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -167,6 +200,48 @@ namespace DataAccess.Migrations
                     b.HasIndex("CreatedById");
 
                     b.ToTable("Quizzes");
+                });
+
+            modelBuilder.Entity("DataAccess.Models.QuizAttempt", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CompletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CorrectAnswers")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuizId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalQuestions")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuizId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("QuizAttempts");
                 });
 
             modelBuilder.Entity("DataAccess.Models.RefreshToken", b =>
@@ -410,6 +485,17 @@ namespace DataAccess.Migrations
                     b.Navigation("Question");
                 });
 
+            modelBuilder.Entity("DataAccess.Models.AnsweredQuestion", b =>
+                {
+                    b.HasOne("DataAccess.Models.Player", "Player")
+                        .WithMany("AnsweredQuestions")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Player");
+                });
+
             modelBuilder.Entity("DataAccess.Models.GameSession", b =>
                 {
                     b.HasOne("DataAccess.Models.User", "CreatedBy")
@@ -460,6 +546,25 @@ namespace DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("CreatedBy");
+                });
+
+            modelBuilder.Entity("DataAccess.Models.QuizAttempt", b =>
+                {
+                    b.HasOne("DataAccess.Models.Quiz", "Quiz")
+                        .WithMany("QuizAttempts")
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("DataAccess.Models.User", "User")
+                        .WithMany("QuizAttempts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Quiz");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DataAccess.Models.RefreshToken", b =>
@@ -529,6 +634,11 @@ namespace DataAccess.Migrations
                     b.Navigation("Players");
                 });
 
+            modelBuilder.Entity("DataAccess.Models.Player", b =>
+                {
+                    b.Navigation("AnsweredQuestions");
+                });
+
             modelBuilder.Entity("DataAccess.Models.Question", b =>
                 {
                     b.Navigation("Answers");
@@ -539,6 +649,8 @@ namespace DataAccess.Migrations
                     b.Navigation("GameSessions");
 
                     b.Navigation("Questions");
+
+                    b.Navigation("QuizAttempts");
                 });
 
             modelBuilder.Entity("DataAccess.Models.User", b =>
@@ -546,6 +658,8 @@ namespace DataAccess.Migrations
                     b.Navigation("CreatedQuizzes");
 
                     b.Navigation("GameSessions");
+
+                    b.Navigation("QuizAttempts");
 
                     b.Navigation("RefreshTokens");
                 });
