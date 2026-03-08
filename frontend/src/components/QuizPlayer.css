@@ -141,5 +141,99 @@
 
 .btn-next:disabled {
     background: #CCC;
+    border-color: #CCC;
     cursor: not-allowed;
+}
+
+/* Blockchain Payment Styles */
+.payment-card {
+    background: white;
+    width: 100%;
+    max-width: 500px;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(91, 78, 119, 0.15);
+    text-align: center;
+    border: 1px solid rgba(91, 78, 119, 0.1);
+}
+
+.payment-card h3 {
+    color: #5B4E77;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.payment-card p {
+    color: #666;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.payment-details {
+    background: #F8F7FA;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-weight: 600;
+    color: #5B4E77;
+}
+
+.btn-connect,
+.btn-pay {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-connect {
+    background: #F6851B;
+    /* MetaMask Orange */
+    color: white;
+}
+
+.btn-connect:hover {
+    background: #E2761B;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(246, 133, 27, 0.3);
+}
+
+.btn-pay {
+    background: #5B4E77;
+    color: white;
+}
+
+.btn-pay:hover:not(:disabled) {
+    background: #4A3F63;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(91, 78, 119, 0.3);
+}
+
+.btn-pay:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.error-text {
+    color: #E53E3E;
+    margin-top: 15px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.loading-card {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    color: #5B4E77;
+    font-weight: 600;
 }
